@@ -41,11 +41,13 @@ class GlobalExceptionFilter implements ExceptionFilter {
         err: (exception.response && exception.response.error)
           ? exception.response.error
           : exception.message,
-        message: (exception.response && exception.response.message)
+        msg: (exception.response && exception.response.message)
           ? exception.response.message
           : exception.message,
-        timestamp: convertPrettyKST(new Date()),
-        path: request.url,
+        ext: {
+          timestamp: convertPrettyKST(new Date()),
+          path: request.url,
+        },
       } : {
           cd: status,
           err: (exception.message) ? exception.message : '',
