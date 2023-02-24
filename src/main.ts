@@ -5,7 +5,7 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import 'reflect-metadata';
-import { utilities as nestWinstonModuleUtilities, WinstonModule } from 'nest-winston';
+import { WinstonModule } from 'nest-winston';
 import winston from 'winston';
 import TransformInterceptor from './interceptors/transform.interceptor';
 import { ConfigService } from '@nestjs/config';
@@ -26,6 +26,7 @@ const IS_PRODUCTION: boolean = process.env.NODE_ENV === 'production';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
+    logger: false,
     rawBody: true,
   });
 
@@ -39,10 +40,12 @@ async function bootstrap() {
     new winston.transports.Console({
       level: logConfig.level,
       format: winston.format.combine(
-        winston.format.timestamp(),
-        winston.format.ms(),
-        nestWinstonModuleUtilities.format.nestLike(),
-
+        winston.format.simple(),
+        winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
+        winston.format.colorize(),
+        winston.format.printf(
+          info => `[${info.timestamp}] ${info.level} ${info.message}`,
+        ),
       ),
     }),
   ];
@@ -68,6 +71,8 @@ async function bootstrap() {
   });
 
   app.useLogger(logger);
+  // app.get(AppModule).setApp(app);
+
   app.enableShutdownHooks();
   app.enableCors({
     origin: appConfig.corsOrigin,
@@ -77,6 +82,7 @@ async function bootstrap() {
   app.use(bodyParser.json({ limit: '1mb' }));
   app.use(bodyParser.urlencoded({ limit: '1mb', extended: true }));
   app.use(cookieParser());
+
   app.useGlobalInterceptors(new TransformInterceptor(config));
 
   app.useGlobalPipes(

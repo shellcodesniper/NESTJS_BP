@@ -35,11 +35,10 @@ class TransformInterceptor<T> implements NestInterceptor<T, RetType<T>> {
 
         if (this.captureResponse) {
           Logger.debug(
-            '======================= Development Response Transform =======================',
-          );
-          Logger.debug(`\n${JSON.stringify(dat, null, 2)}\n`);
-          Logger.debug(
-            '==============================================================================',
+            '\n======================= Response: =======================\n'
+            + `[${context.switchToHttp().getResponse().statusCode as number}]\n`
+            + `\n${JSON.stringify(dat, null, 2)}\n`
+            + '===================== End Response ======================\n\n'
           );
         }
         return dat;

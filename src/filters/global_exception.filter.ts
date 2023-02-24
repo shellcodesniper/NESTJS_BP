@@ -1,7 +1,6 @@
 import {
   ExceptionFilter, Catch,
   ArgumentsHost,
-  Logger,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 
@@ -19,6 +18,7 @@ function convertPrettyKST(time: string | number | Date, simple?: boolean): strin
   return `${year}-${month}-${date} ${hour}:${minute}:${second}`;
 }
 
+// NOTE : CATCH ERROR AND FILTER IT TO GENERALIZED RESPONSE!
 @Catch()
 class GlobalExceptionFilter implements ExceptionFilter {
   catch(exception: any, host: ArgumentsHost) {
@@ -28,7 +28,6 @@ class GlobalExceptionFilter implements ExceptionFilter {
     const status = exception.getStatus ? exception.getStatus() : 500;
 
     const exceptionResponse = exception.getResponse ? exception.getResponse() : 'NO RESPONSE';
-    Logger.error(JSON.stringify(exception));
 
     if (exception.response) {
       response
