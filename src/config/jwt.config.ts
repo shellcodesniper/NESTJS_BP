@@ -23,7 +23,6 @@ export default registerAs(
       signOptions: {
         algorithm: accessConfig.sign_option.algorithm,
         expiresIn: accessConfig.sign_option.expires_in,
-        audience: accessConfig.sign_option.audience,
       },
     },
     refreshToken: {
@@ -31,7 +30,6 @@ export default registerAs(
       signOptions: {
         algorithm: refreshConfig.sign_option.algorithm,
         expiresIn: refreshConfig.sign_option.expires_in,
-        audience: refreshConfig.sign_option.audience,
       },
     }
   }));

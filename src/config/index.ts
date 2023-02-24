@@ -48,7 +48,6 @@ export interface IJWTOption {
   signOptions: {                  // TYPE : SIGN OPTIONS
     algorithm: string;            // TYPE : ALGORITHM
     expiresIn: number;            // TYPE : EXPIRES IN
-    audience: string;             // TYPE : AUDIENCE
   };
 }
 

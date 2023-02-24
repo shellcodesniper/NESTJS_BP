@@ -35,6 +35,7 @@ export default registerAs(
       corsOrigin: appEnv.corsOrigin || hostUrl,
       port,
       https: appEnv.https || false,
+      host,
       version,
     } as IAppEnv;
   }

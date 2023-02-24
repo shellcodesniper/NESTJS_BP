@@ -8,6 +8,8 @@ import { LocalStrategy } from './local.strategy';
 import { JwtModule } from '@nestjs/jwt';
 import { IAppEnv, IJWTEnv } from '@src/config';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { JwtStrategy } from './jwt.strategy';
+import { AuthController } from './auth.controller';
 
 @Module({
   imports: [
@@ -18,6 +20,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         const appConfig = configService.get<IAppEnv>('app')!;
         const jwtConfig = configService.get<IJWTEnv>('jwt')!;
         const accessConfig = jwtConfig.accessToken;
+        console.log(accessConfig, appConfig);
 
         return {
           secretOrPrivateKey: accessConfig.secretOrPrivateKey,
@@ -26,16 +29,17 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
             expiresIn: accessConfig.signOptions.expiresIn,
             issuer: appConfig.host,
             encoding: 'utf8',
-            audience: accessConfig.signOptions.audience,
-            subject: 'access_token',
           },
         };
       },
       inject: [ConfigService],
     }),
   ],
+  controllers: [
+    AuthController,
+  ],
   providers: [
-    AuthService, LocalStrategy,
+    AuthService, LocalStrategy, JwtStrategy, ConfigService,
   ],
   exports: [AuthService],
 })

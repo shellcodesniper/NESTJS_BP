@@ -19,11 +19,14 @@ export class AuthService {
     return null;
   }
 
-  async login(user: User) {
-    const payload = { username: user.username, sub: user.userId };
-    return {
-      access_token: this.jwtService.sign(payload),
-    }
+  async login(user?: User) {
+    if (user) {
+      const payload = { username: user.username, sub: user.userId };
+      return {
+        access_token: this.jwtService.sign(payload),
+      }
+    } 
+    throw new Error('User not found');
 
   }
 }
