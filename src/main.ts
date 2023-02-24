@@ -5,7 +5,7 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import 'reflect-metadata';
-import { WinstonModule } from 'nest-winston';
+import { utilities as nestWinstonModuleUtilities, WinstonModule } from 'nest-winston';
 import winston from 'winston';
 import TransformInterceptor from './interceptors/transform.interceptor';
 import { ConfigService } from '@nestjs/config';
@@ -26,7 +26,6 @@ const IS_PRODUCTION: boolean = process.env.NODE_ENV === 'production';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
-    logger: false,
     rawBody: true,
   });
 
@@ -40,11 +39,15 @@ async function bootstrap() {
     new winston.transports.Console({
       level: logConfig.level,
       format: winston.format.combine(
-        winston.format.simple(),
-        winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
-        winston.format.colorize(),
-        winston.format.printf(
-          info => `[${info.timestamp}] ${info.level} ${info.message}`,
+        winston.format.timestamp({ format: 'MM-DD HH:mm:ss' }),
+        winston.format.ms(),
+        winston.format.uncolorize(),
+        nestWinstonModuleUtilities.format.nestLike(
+          process.env.PACKAGE_NAME || 'ql.gl',
+          {
+            colors: true,
+            prettyPrint: true,
+          }
         ),
       ),
     }),
