@@ -6,11 +6,13 @@ import type express from 'express';
 import { LocalAuthGuard } from './local-auth.guard';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { AuthService } from './auth.service';
+import { PublicEndpoint } from '@src/decorators/public.decorator';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @PublicEndpoint()
   @UseGuards(LocalAuthGuard)
   @Post('login')
   async login(@Request() req: any) {

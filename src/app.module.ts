@@ -11,6 +11,8 @@ import { configLoaders } from './config/';
 import { CaptureRequestMiddleware } from './middlewares/capture.middleware';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtAuthGuard } from './auth/jwt-auth.guard';
 
 
 @Module({
@@ -25,6 +27,10 @@ import { UsersModule } from './users/users.module';
     AppController,
   ],
   providers: [
+    {
+    provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
     AppService,
     ConfigService,
   ],
