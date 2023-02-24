@@ -8,11 +8,12 @@ import 'reflect-metadata';
 import { utilities as nestWinstonModuleUtilities, WinstonModule } from 'nest-winston';
 import winston from 'winston';
 import TransformInterceptor from './interceptors/transform.interceptor';
+import { ConfigService } from '@nestjs/config';
 // import CloudWatchTransport from 'winston-cloudwatch'; // NOTE : CLOUD WATCH LOGGING
 
 process.env.NODE_ENV = (process.env.NODE_ENV || 'development').trim().toLowerCase();
 process.env.TZ = 'Asia/Seoul';
-process.env.VERSION = process.env.npm_package_version || process.env.APP_VERSION || '0.0.0';
+process.env.VERSION = `v${process.env.npm_package_version || process.env.APP_VERSION || '0.0.0'}`;
 console.log(process.env.npm_package_version);
 process.on('SIGINT', () => {
   console.warn('\nGracefully shutting down from SIGINT (Ctrl-C)');
@@ -63,6 +64,11 @@ async function bootstrap() {
     }),
     rawBody: true,
   });
+
+  const configService = app.get(ConfigService);
+
+  const http = configService.get('http');
+  console.log(http);
 
   app.enableShutdownHooks();
 
