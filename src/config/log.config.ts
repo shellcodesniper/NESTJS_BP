@@ -17,6 +17,10 @@ export default registerAs(
   'log', // TYPE : REGISTER AS THIS NAME
   (): ILogEnv => ({
   level: logEnv.level || 'info',
+
+  captureResponse: logEnv.capture_response || false,
+  captureRequest: logEnv.capture_request || false,
+
   cloudwatch: {
     enabled: logEnv.cloudwatch.enabled || false,
     loggerName: logEnv.cloudwatch.name || 'cloudwatcher',

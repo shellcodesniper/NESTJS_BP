@@ -1,13 +1,18 @@
 import { Injectable, NestInterceptor, ExecutionContext, CallHandler, Logger } from '@nestjs/common';
 import { Observable } from 'rxjs';
+import { ConfigService } from '@nestjs/config';
 import { map } from 'rxjs/operators';
-
-const IS_PRODUCTION = process.env.NODE_ENV === 'production';
-
 import { RetType } from '$type/ret';
+import { ILogEnv } from '@src/config';
 
 @Injectable()
 class TransformInterceptor<T> implements NestInterceptor<T, RetType<T>> {
+  captureResponse: boolean = false;
+
+  constructor(private configService: ConfigService) {
+    const logConfig = this.configService.get<ILogEnv>('log')!;
+    this.captureResponse = logConfig.captureResponse;
+  }
   intercept(context: ExecutionContext, next: CallHandler): Observable<RetType<T>> {
     return next.handle().pipe(
       map((data: RetType<any> | string) => {
@@ -16,18 +21,19 @@ class TransformInterceptor<T> implements NestInterceptor<T, RetType<T>> {
             ? {
                 cd: context.switchToHttp().getResponse().statusCode as number,
                 msg: data,
-                dat: null,
-                err: null,
+                dat: undefined,
+                err: undefined,
               }
             : {
                 cd: context.switchToHttp().getResponse().statusCode as number,
-                msg: data.msg || null,
-                dat: data.dat || null,
-                err: null,
+                msg: data.msg || undefined,
+                dat: data.dat || undefined,
+                err: undefined,
+                ext: data.ext || undefined,
                 // ...data,
               };
 
-        if (IS_PRODUCTION) {
+        if (this.captureResponse) {
           Logger.debug(
             '======================= Development Response Transform =======================',
           );

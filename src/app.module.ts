@@ -11,7 +11,11 @@ import { configLoaders } from './config/';
       load: configLoaders,
     }),
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [
+    AppController,
+  ],
+  providers: [
+    AppService,
+  ],
 })
 export class AppModule {}

@@ -77,7 +77,7 @@ async function bootstrap() {
   app.use(bodyParser.json({ limit: '1mb' }));
   app.use(bodyParser.urlencoded({ limit: '1mb', extended: true }));
   app.use(cookieParser());
-  app.useGlobalInterceptors(new TransformInterceptor());
+  app.useGlobalInterceptors(new TransformInterceptor(config));
 
   app.useGlobalPipes(
     new ValidationPipe({

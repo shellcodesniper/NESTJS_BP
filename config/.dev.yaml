@@ -7,6 +7,10 @@ app:
 
 log:
   level: debug
+  capture_request: true
+  # NOTE : 요청에 대한 디버깅?
+  capture_response: true
+  # NOTE : 응답에 대한 디버깅 ?
 
   cloudwatch:
     enabled: false

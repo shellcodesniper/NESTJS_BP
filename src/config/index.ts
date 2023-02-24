@@ -17,6 +17,10 @@ export interface IAppEnv {
 
 export interface ILogEnv {
   level: string;                  // TYPE : LOG LEVEL
+
+  captureRequest: boolean;        // TYPE : CAPTURE REQUEST?
+  captureResponse: boolean;       // TYPE : CAPTURE RESPONSE?
+
   cloudwatch: {                   // TYPE : CLOUDWATCH LOGGING
     enabled: boolean;             // TYPE : ENABLED?
     loggerName: string;           // TYPE : LOGGER NAME

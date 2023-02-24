@@ -3,4 +3,5 @@ export interface RetType<T> {
   msg?: string | null,
   dat?: T | null,
   err?: any | null,
+  ext?: any | null,
 };
