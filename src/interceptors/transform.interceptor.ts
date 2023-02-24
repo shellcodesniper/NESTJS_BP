@@ -27,7 +27,7 @@ class TransformInterceptor<T> implements NestInterceptor<T, RetType<T>> {
             : {
                 cd: context.switchToHttp().getResponse().statusCode as number,
                 msg: data.msg || undefined,
-                dat: data.dat || undefined,
+                dat: data.dat || { ...data } || undefined,
                 err: undefined,
                 ext: data.ext || undefined,
                 // ...data,

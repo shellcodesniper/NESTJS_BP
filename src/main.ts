@@ -1,4 +1,4 @@
-import { NestFactory } from '@nestjs/core';
+import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
@@ -11,6 +11,7 @@ import TransformInterceptor from './interceptors/transform.interceptor';
 import { ConfigService } from '@nestjs/config';
 import CloudWatchTransport from 'winston-cloudwatch'; // NOTE : CLOUD WATCH LOGGING
 import { IAppEnv, ILogEnv } from './config';
+import GlobalExceptionFilter from './filters/global_exception.filter';
 
 process.env.PACKAGE_NAME = process.env.npm_package_name || 'ql.gl';
 process.env.PACKAGE_DESCRIPTION = process.env.npm_package_description || 'https://ql.gl';
@@ -74,7 +75,6 @@ async function bootstrap() {
   });
 
   app.useLogger(logger);
-  // app.get(AppModule).setApp(app);
 
   app.enableShutdownHooks();
   app.enableCors({
@@ -86,7 +86,10 @@ async function bootstrap() {
   app.use(bodyParser.urlencoded({ limit: '1mb', extended: true }));
   app.use(cookieParser());
 
+  const httpAdapterHost = app.get(HttpAdapterHost);
+
   app.useGlobalInterceptors(new TransformInterceptor(config));
+  app.useGlobalFilters(new GlobalExceptionFilter(httpAdapterHost));
 
   app.useGlobalPipes(
     new ValidationPipe({

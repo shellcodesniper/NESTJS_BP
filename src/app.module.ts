@@ -1,12 +1,17 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+// import { APP_FILTER } from '@nestjs/core';
+import {
+  Logger, MiddlewareConsumer,
+  Module, NestModule,
+} from '@nestjs/common';
+
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 import { configLoaders } from './config/';
 import { CaptureRequestMiddleware } from './middlewares/capture.middleware';
-import { Logger } from '@nestjs/common';
-import { APP_FILTER } from '@nestjs/core';
-import GlobalExceptionFilter from './filters/global_exception.filter';
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
+// import GlobalExceptionFilter from './filters/global_exception.filter';
 
 
 @Module({
@@ -14,15 +19,17 @@ import GlobalExceptionFilter from './filters/global_exception.filter';
     ConfigModule.forRoot({
       load: configLoaders,
     }),
+    AuthModule,
+    UsersModule,
   ],
   controllers: [
     AppController,
   ],
   providers: [
-    {
-      provide: APP_FILTER,
-      useClass: GlobalExceptionFilter,
-    },
+    // {
+    //   provide: APP_FILTER,
+    //   useClass: GlobalExceptionFilter,
+    // },
     AppService,
     ConfigService,
   ],
