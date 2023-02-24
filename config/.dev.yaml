@@ -5,6 +5,20 @@ app:
   port: 3000
   https: false
 
+jwt:
+  access_token:
+    secret_or_private_key: asdfasdf
+    sign_option:
+      algorithm: HS512
+      expires_in: 1d
+      audience: ql.gl
+  refresh_token:
+    secret_or_private_key: asdfasdf
+    sign_option:
+      algorithm: HS512
+      expires_in: 1d
+      audience: ql.gl
+
 log:
   level: debug
   capture_request: true
@@ -26,4 +40,4 @@ db:
   username: 
   password: 
   port: 
-  schema: 
+  schema:   

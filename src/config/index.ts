@@ -1,6 +1,12 @@
+import { default as defaultConfig } from './default.config';
+import { default as appConfig } from './app.config';
+import { default as logConfig } from './log.config';
+import { default as jwtConfig } from './jwt.config';
+
 export interface IDefaultEnv {
   app: IAppEnv;                   // TYPE : APP
   log: ILogEnv;                   // TYPE : LOGGING
+  jwt: IJWTEnv;
 }
 
 export interface IAppEnv {
@@ -32,18 +38,31 @@ export interface ILogEnv {
   };
 }
 
-import { default as defaultConfig } from './default.config';
-import { default as appConfig } from './app.config';
-import { default as logConfig } from './log.config';
+export interface IJWTEnv {
+  accessToken: IJWTOption;        // TYPE : ACCESS TOKEN
+  refreshToken: IJWTOption;       // TYPE : REFRESH TOKEN
+}
+
+export interface IJWTOption {
+  secretOrPrivateKey: string;     // TYPE : SECRET OR PRIVATE KEY
+  signOptions: {                  // TYPE : SIGN OPTIONS
+    algorithm: string;            // TYPE : ALGORITHM
+    expiresIn: number;            // TYPE : EXPIRES IN
+    audience: string;             // TYPE : AUDIENCE
+  };
+}
+
 
 export const configLoaders = [
   defaultConfig,
   appConfig,
   logConfig,
+  jwtConfig,
 ];
 
 export {
   defaultConfig,
   appConfig,
   logConfig,
+  jwtConfig,
 }
