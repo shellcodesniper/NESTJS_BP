@@ -10,6 +10,7 @@
         "outDir": "./dist/config/config/",
         "watchAssets": true
       }
-    ]
+    ],
+    "watchAssets": true
   }
 }

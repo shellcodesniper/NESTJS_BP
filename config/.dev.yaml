@@ -1,4 +1,25 @@
-http:
-  host: 'localhost'
+app:
+  host: localhost
+  corsOrigin:
+    - '*'
   port: 3000
-  
+  https: false
+
+log:
+  level: debug
+
+  cloudwatch:
+    enabled: false
+    name: 
+    log_group: 
+    stream_name: 
+    access_key: 
+    secret_key: 
+    log_level: debug
+
+db:
+  host: 
+  username: 
+  password: 
+  port: 
+  schema: 
