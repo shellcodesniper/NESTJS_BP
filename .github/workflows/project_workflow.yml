@@ -1,0 +1,22 @@
+# NOTE : https://github.com/actions/add-to-project
+# NOTE : https://github.com/marketplace/actions/add-to-github-projects
+name: Issue To Project
+
+on:
+  issues:
+    types:
+      - opened
+
+jobs:
+  add-to-project:
+    name: Add issue to project
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/add-to-project@v0.4.0
+        with:
+          # You can target a repository in a different organization
+          # to the issue
+          project-url: https://github.com/users/shellcodesniper/projects/3
+          github-token: ${{ secrets.PROJECT_AND_ISSUE_PAT_TOKEN }}
+          #labeled: bug, needs-triage
+          #label-operator: OR
