@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@src/*": ["src/*"],
+      "@auth/*": ["src/auth/*"],
+      "@interceptor/*": ["src/interceptors/*"],
+      "@decorator/*": ["src/decorators/*"],
+      "@filter/*": ["src/filters/*"],
+
+      "@util/*": ["src/utils/*"],
+      "@root/*": ["./*"],
+      "@config/*": ["config/*"],
+      "$type/*": ["src/@types/*"],
+    },
+    "typeRoots": [
+      "./node_modules/@types/",
+      "./@types/",
+    ]
+  }
+}
+
