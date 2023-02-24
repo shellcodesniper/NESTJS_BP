@@ -11,11 +11,11 @@
       "@util/*": ["src/utils/*"],
       "@root/*": ["./*"],
       "@config/*": ["config/*"],
-      "$type/*": ["src/@types/*"],
+      "$type/*": ["src/@types/*"]
     },
     "typeRoots": [
       "./node_modules/@types/",
-      "./@types/",
+      "./@types/"
     ]
   }
 }

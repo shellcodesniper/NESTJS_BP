@@ -1,0 +1,4 @@
+http:
+  host: 'ql.gl'
+  https: true
+  port: 3000
