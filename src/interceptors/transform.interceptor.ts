@@ -16,29 +16,31 @@ class TransformInterceptor<T> implements NestInterceptor<T, RetType<T>> {
   intercept(context: ExecutionContext, next: CallHandler): Observable<RetType<T>> {
     return next.handle().pipe(
       map((data: RetType<any> | string) => {
-        const dat: RetType<any> =
-          typeof data === 'string'
-            ? {
-                cd: context.switchToHttp().getResponse().statusCode as number,
-                msg: data,
-                dat: undefined,
+        let dat: RetType<any> = 
+          (
+            typeof data === 'string'
+              ? {
                 err: undefined,
+                msg: undefined,
+                dat: data,
+                ext: undefined,
               }
-            : {
-                cd: context.switchToHttp().getResponse().statusCode as number,
-                msg: data.msg || undefined,
-                dat: data.dat || { ...data } || undefined,
-                err: undefined,
-                ext: data.ext || undefined,
-                // ...data,
-              };
+              : (data.dat && 'kvType' in data.dat && data.dat.kvType === 'KVType')
+                ? {
+                  ...data,
+                  [data.dat.key]: data.dat.value,
+                }
+                : {
+                  ...data,
+                }
+          );
 
         if (this.captureResponse) {
           Logger.debug(
             '\n======================= Response: =======================\n'
-            + `[${context.switchToHttp().getResponse().statusCode as number}]\n`
-            + `\n${JSON.stringify(dat, null, 2)}\n`
-            + '===================== End Response ======================\n\n'
+              + `[${context.switchToHttp().getResponse().statusCode as number}]\n`
+              + `\n${JSON.stringify(dat, null, 2)}\n`
+              + '===================== End Response ======================\n\n'
           );
         }
         return dat;

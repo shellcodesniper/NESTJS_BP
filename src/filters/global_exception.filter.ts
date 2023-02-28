@@ -1,10 +1,10 @@
 import {
   ExceptionFilter, Catch,
-  ArgumentsHost, Logger,
+  ArgumentsHost, Logger, HttpException,
 } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
 import type { Request } from 'express';
-import { KError } from '@src/utils/error.handler';
+import { isObject, isString } from '@src/utils/error.handler';
 
 function convertPrettyKST(time: string | number | Date, simple?: boolean): string {
   const dateObj = new Date(time);
@@ -33,43 +33,32 @@ class GlobalExceptionFilter implements ExceptionFilter {
     // const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
 
-    const exceptionResponse = exception.getResponse ? exception.getResponse() : 'NO RESPONSE';
     const status = exception.getStatus ? exception.getStatus() : 400;
-    let exceptionMessage = '';
-    if (exception.response && exception.response.error) {
-      exceptionMessage = exception.response.error;
-    } else if (exception.message) {
-      exceptionMessage = exception.message;
-    } else if (exceptionResponse.error) {
-      exceptionMessage = exceptionResponse.error;
-    } else {
-      exceptionMessage = 'UNKNOWN ERROR';
-    }
 
+    const exceptionResponse = (exception instanceof HttpException) ? exception.getResponse() : {};
+    const exceptionErrorString: string = (isObject(exceptionResponse) && ('error' in exceptionResponse)) ? (exceptionResponse.error || '').toString() : "";
+    const exceptionMessage: string = (isObject(exceptionResponse) && 'message' in exceptionResponse && isString(exceptionResponse.message))
+      ? exceptionResponse.message
+      : JSON.stringify(exceptionResponse || '');
+    const exceptionExtention: object = Object.assign(
+      (isObject(exceptionResponse) && 'ext' in exceptionResponse && isObject(exceptionResponse.ext) ? exceptionResponse.ext : {}),
+      {
+        timestamp: convertPrettyKST(new Date()),
+        path: request.url,
+      }
+    )
 
-    const responseBody = (
-      exception instanceof KError
-      ? {
-        cd: exception.getStatus(),
-        err: exception.getErrorMsg(),
-        ext: exception.getErrorDetail(),
-      }
-      : {
-        cd: status,
-        err: exceptionMessage,
-        msg: exceptionMessage,
-        ext: {
-          timestamp: convertPrettyKST(new Date()),
-          path: request.url,
-        },
-      }
-    );
+    const responseBody = {
+      err: exceptionErrorString,
+      msg: exceptionMessage,
+      ext: exceptionExtention,
+    };
 
     Logger.error(
       '\n======================= ERROR : =======================\n'
-      + `[${status}]\n`
-      + `\n${JSON.stringify(responseBody, null, 2)}\n`
-      + '===================== End ERROR =======================\n\n'
+        + `[${status}]\n`
+        + `\n${JSON.stringify(responseBody, null, 2)}\n`
+        + '===================== End ERROR =======================\n\n'
     );
     httpAdapter.reply(ctx.getResponse(), responseBody, status);
   }
