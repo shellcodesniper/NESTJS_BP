@@ -11,7 +11,6 @@ const ENV_PATH: string = path.join(BASE_PATH, process.env.NODE_ENV === 'producti
 
 const parsedEnv = yaml.load(fs.readFileSync(ENV_PATH, 'utf-8')) as Record<string, any>;
 const logEnv = parsedEnv.log as Record<string, any>;
-// console.log(parsedEnv);
 
 export interface IRootEnv {
   port: number;

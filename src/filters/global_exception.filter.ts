@@ -4,6 +4,7 @@ import {
 } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
 import type { Request } from 'express';
+import { KError } from '@src/utils/error.handler';
 
 function convertPrettyKST(time: string | number | Date, simple?: boolean): string {
   const dateObj = new Date(time);
@@ -31,33 +32,37 @@ class GlobalExceptionFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     // const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
-    const status = exception.getStatus ? exception.getStatus() : 500;
+
     const exceptionResponse = exception.getResponse ? exception.getResponse() : 'NO RESPONSE';
+    const status = exception.getStatus ? exception.getStatus() : 400;
+    let exceptionMessage = '';
+    if (exception.response && exception.response.error) {
+      exceptionMessage = exception.response.error;
+    } else if (exception.message) {
+      exceptionMessage = exception.message;
+    } else if (exceptionResponse.error) {
+      exceptionMessage = exceptionResponse.error;
+    } else {
+      exceptionMessage = 'UNKNOWN ERROR';
+    }
 
 
-    const responseBody = (exception.response)
+    const responseBody = (exception instanceof KError)
       ? {
+        cd: exception.getStatus(),
+        err: exception.getErrorMsg(),
+        ext: exception.getErrorDetail(),
+      }
+      : {
         cd: status,
-        err: (exception.response && exception.response.error)
-          ? exception.response.error
-          : exception.message,
-        msg: (exception.response && exception.response.message)
-          ? exception.response.message
-          : exception.message,
+        err: exceptionMessage,
+        msg: exceptionMessage,
         ext: {
           timestamp: convertPrettyKST(new Date()),
           path: request.url,
         },
-      } : {
-          cd: status,
-          err: (exception.message) ? exception.message : '',
-          msg: (exceptionResponse && exceptionResponse.error)
-            ? exceptionResponse.error : exception.message,
-          ext: {
-            timestamp: convertPrettyKST(new Date()),
-            path: request.url,
-          },
       };
+
       Logger.error(
         '\n======================= ERROR : =======================\n'
         + `[${status}]\n`
