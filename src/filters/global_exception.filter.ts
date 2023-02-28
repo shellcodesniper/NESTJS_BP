@@ -47,7 +47,8 @@ class GlobalExceptionFilter implements ExceptionFilter {
     }
 
 
-    const responseBody = (exception instanceof KError)
+    const responseBody = (
+      exception instanceof KError
       ? {
         cd: exception.getStatus(),
         err: exception.getErrorMsg(),
@@ -61,14 +62,15 @@ class GlobalExceptionFilter implements ExceptionFilter {
           timestamp: convertPrettyKST(new Date()),
           path: request.url,
         },
-      };
+      }
+    );
 
-      Logger.error(
-        '\n======================= ERROR : =======================\n'
-        + `[${status}]\n`
-        + `\n${JSON.stringify(responseBody, null, 2)}\n`
-        + '===================== End ERROR =======================\n\n'
-      );
+    Logger.error(
+      '\n======================= ERROR : =======================\n'
+      + `[${status}]\n`
+      + `\n${JSON.stringify(responseBody, null, 2)}\n`
+      + '===================== End ERROR =======================\n\n'
+    );
     httpAdapter.reply(ctx.getResponse(), responseBody, status);
   }
 }
