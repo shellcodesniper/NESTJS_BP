@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators';
 import { RetType } from '$type/ret';
 import { ILogEnv } from '@src/config';
 import { Response } from 'express';
+import { KError } from '@src/utils/error.handler';
 
 @Injectable()
 class TransformInterceptor<T> implements NestInterceptor<T, RetType<T>> {
@@ -39,10 +40,9 @@ class TransformInterceptor<T> implements NestInterceptor<T, RetType<T>> {
           }
           return body;
         }
-        Logger.debug('Response is not instance of RetType, return as it is');
-        Logger.debug(JSON.stringify(data, null, 2));
-        return data;
-        // throw new KError('INTERNAL_SERVER_ERROR', 500, 'Internal Server Error', {})
+        Logger.error('Response is not instance of RetType, return as it is');
+        Logger.error(JSON.stringify(data, null, 2));
+        throw new KError('INTERNAL_SERVER_ERROR', 500, 'Internal Server Error', {})
       }),
     );
   }
