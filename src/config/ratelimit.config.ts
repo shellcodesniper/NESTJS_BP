@@ -2,6 +2,7 @@ import { registerAs } from '@nestjs/config';
 import * as yaml from 'js-yaml';
 import fs from 'fs';
 import path from 'path';
+import { IRateLimitEnv } from '.';
 
 // NOTE : DEFAULT_ENV_PATH
 
@@ -10,14 +11,13 @@ const ENV_PATH: string = path.join(BASE_PATH, process.env.NODE_ENV === 'producti
 ? '.prod.yaml' : '.dev.yaml');
 
 const parsedEnv = yaml.load(fs.readFileSync(ENV_PATH, 'utf-8')) as Record<string, any>;
-const logEnv = parsedEnv.log as Record<string, any>;
-
-export interface IRootEnv {
-  port: number;
-}
+const rateLimitEnv = parsedEnv['rate-limit'] as Record<string, any>;
 
 export default registerAs(
-  'root', // TYPE : REGISTER AS THIS NAME
-  (): IRootEnv => ({
-  port: parseInt(logEnv.PORT || '', 10) || 3000,
+  'rate-limit', // TYPE : REGISTER AS THIS NAME
+  (): IRateLimitEnv => ({
+    ttl: rateLimitEnv.ttl || 10,
+    limit: rateLimitEnv.limit || 100,
 }));
+
+

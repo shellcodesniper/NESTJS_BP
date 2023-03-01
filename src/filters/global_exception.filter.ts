@@ -1,9 +1,10 @@
 import {
   ExceptionFilter, Catch,
-  ArgumentsHost, Logger,
+  ArgumentsHost, Logger, HttpException,
 } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
 import type { Request } from 'express';
+import { isString, KError } from '@src/utils/error.handler';
 
 function convertPrettyKST(time: string | number | Date, simple?: boolean): string {
   const dateObj = new Date(time);
@@ -31,39 +32,51 @@ class GlobalExceptionFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     // const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
-    const status = exception.getStatus ? exception.getStatus() : 500;
-    const exceptionResponse = exception.getResponse ? exception.getResponse() : 'NO RESPONSE';
 
+    const status = exception.getStatus ? exception.getStatus() : 400;
 
-    const responseBody = (exception.response)
-      ? {
-        cd: status,
-        err: (exception.response && exception.response.error)
-          ? exception.response.error
-          : exception.message,
-        msg: (exception.response && exception.response.message)
-          ? exception.response.message
-          : exception.message,
-        ext: {
-          timestamp: convertPrettyKST(new Date()),
-          path: request.url,
-        },
-      } : {
-          cd: status,
-          err: (exception.message) ? exception.message : '',
-          msg: (exceptionResponse && exceptionResponse.error)
-            ? exceptionResponse.error : exception.message,
-          ext: {
-            timestamp: convertPrettyKST(new Date()),
-            path: request.url,
-          },
-      };
-      Logger.error(
-        '\n======================= ERROR : =======================\n'
+    let err: string = '';
+    let msg: string = '';
+    let ext: object = {};
+
+    if (exception instanceof HttpException) {
+      if (isString(exception.getResponse())) {
+        console.log(exception);
+        err = exception.getResponse() as string;
+        msg = (exception.getResponse() as string !== exception.message) ? exception.message : '';
+        ext = {};
+      } else if (exception instanceof KError){
+        console.log(exception);
+        err = isString(exception.getResponse()) ? exception.getResponse() : (exception.getResponse() as any).error || exception.message;
+        msg = isString(exception.getResponse()) ? exception.getResponse() : (exception.getResponse() as any).message || exception.message;
+        ext = exception.getExtraInfo();
+      } else {
+        err = `${exception.getResponse()}`;
+        msg = exception.message;
+        ext = {};
+      }
+
+    }
+    const exceptionExtraInfo: object = Object.assign(
+      ext,
+      {
+        timestamp: convertPrettyKST(new Date()),
+        path: request.url,
+      }
+    )
+
+    const responseBody = {
+      err,
+      msg,
+      ext: exceptionExtraInfo,
+    };
+
+    Logger.error(
+      '\n======================= ERROR : =======================\n'
         + `[${status}]\n`
         + `\n${JSON.stringify(responseBody, null, 2)}\n`
         + '===================== End ERROR =======================\n\n'
-      );
+    );
     httpAdapter.reply(ctx.getResponse(), responseBody, status);
   }
 }

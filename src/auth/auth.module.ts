@@ -20,7 +20,6 @@ import { AuthController } from './auth.controller';
         const appConfig = configService.get<IAppEnv>('app')!;
         const jwtConfig = configService.get<IJWTEnv>('jwt')!;
         const accessConfig = jwtConfig.accessToken;
-        console.log(accessConfig, appConfig);
 
         return {
           secretOrPrivateKey: accessConfig.secretOrPrivateKey,

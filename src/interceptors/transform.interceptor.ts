@@ -4,6 +4,8 @@ import { ConfigService } from '@nestjs/config';
 import { map } from 'rxjs/operators';
 import { RetType } from '$type/ret';
 import { ILogEnv } from '@src/config';
+import { Response } from 'express';
+import { KError } from '@src/utils/error.handler';
 
 @Injectable()
 class TransformInterceptor<T> implements NestInterceptor<T, RetType<T>> {
@@ -15,33 +17,32 @@ class TransformInterceptor<T> implements NestInterceptor<T, RetType<T>> {
   }
   intercept(context: ExecutionContext, next: CallHandler): Observable<RetType<T>> {
     return next.handle().pipe(
-      map((data: RetType<any> | string) => {
-        const dat: RetType<any> =
-          typeof data === 'string'
-            ? {
-                cd: context.switchToHttp().getResponse().statusCode as number,
-                msg: data,
-                dat: undefined,
-                err: undefined,
-              }
-            : {
-                cd: context.switchToHttp().getResponse().statusCode as number,
-                msg: data.msg || undefined,
-                dat: data.dat || { ...data } || undefined,
-                err: undefined,
-                ext: data.ext || undefined,
-                // ...data,
-              };
+      map((data: RetType<any> | any) => {
+        if (data instanceof RetType) {
+          const body: any = data.getBody();
 
-        if (this.captureResponse) {
-          Logger.debug(
-            '\n======================= Response: =======================\n'
-            + `[${context.switchToHttp().getResponse().statusCode as number}]\n`
-            + `\n${JSON.stringify(dat, null, 2)}\n`
-            + '===================== End Response ======================\n\n'
-          );
+          // NOTE : SET STATUS CODE & HEADER
+          (context.switchToHttp()
+          .getResponse() as Response)
+          .status(data.getHttpStatusCode())
+          .contentType('application/json; charset=utf-8')
+          .setHeader('Content-Location', context.switchToHttp().getRequest().path)
+
+          // NOTE : SET STATUS CODE & HEADER
+
+          if (this.captureResponse) {
+            Logger.debug(
+              '\n======================= Response: =======================\n'
+                + `[${context.switchToHttp().getResponse().statusCode as number}]\n`
+                + `\n${JSON.stringify(body, null, 2)}\n`
+                + '===================== End Response ======================\n\n'
+            );
+          }
+          return body;
         }
-        return dat;
+        Logger.error('Response is not instance of RetType, return as it is');
+        Logger.error(JSON.stringify(data, null, 2));
+        throw new KError('INTERNAL_SERVER_ERROR', 500, 'Internal Server Error', {})
       }),
     );
   }

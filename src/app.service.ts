@@ -1,9 +1,15 @@
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { IAppEnv } from './config';
 
 @Injectable()
 export class AppService {
-  getHello(): string {
-    return 'Hello World!';
+  private appConfig: IAppEnv;
+  constructor(private configService: ConfigService) {
+    this.appConfig = this.configService.get<IAppEnv>('app')!;
+  }
+  getVersion(): string {
+    return this.appConfig.version;
   }
   testError(): void {
     throw new Error('TEST ERROR');

@@ -7,18 +7,30 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { configLoaders } from './config/';
+import { configLoaders, IRateLimitEnv } from './config/';
 import { CaptureRequestMiddleware } from './middlewares/capture.middleware';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       load: configLoaders,
+    }),
+    ThrottlerModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => {
+        const rateLimitConfig: IRateLimitEnv = configService.get<IRateLimitEnv>('rate-limit')!;
+        return {
+          ttl: rateLimitConfig.ttl,
+          limit: rateLimitConfig.limit,
+        };
+      },
+      inject: [ConfigService],
     }),
     AuthModule,
     UsersModule,
@@ -28,8 +40,12 @@ import { JwtAuthGuard } from './auth/jwt-auth.guard';
   ],
   providers: [
     {
-    provide: APP_GUARD,
+      provide: APP_GUARD,
       useClass: JwtAuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
     },
     AppService,
     ConfigService,

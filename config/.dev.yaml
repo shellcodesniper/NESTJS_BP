@@ -5,6 +5,13 @@ app:
   port: 3000
   https: false
 
+rate-limit:
+  # TYPE: ttl 단위 (초)
+  ttl: 10
+  # TYPE: ttl 당 제한
+  limit: 1
+
+
 jwt:
   access_token:
     secret_or_private_key: asdfasdf
