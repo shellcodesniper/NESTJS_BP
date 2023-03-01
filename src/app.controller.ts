@@ -1,6 +1,7 @@
 import {
   Controller, Get,
 } from '@nestjs/common';
+import { RetType, HttpStatus } from './@types/ret';
 import { AppService } from './app.service';
 import { PublicEndpoint } from './decorators/public.decorator';
 // import { KError } from './utils/error.handler';
@@ -11,9 +12,13 @@ export class AppController {
 
   @PublicEndpoint()
   @Get()
-  getHello(): string {
+  getHello(): RetType<Record<string, string>> {
     // throw new KError('TEST ERROR', 400, 'error string', {});
     // throw new UnauthorizedException();
-    return this.appService.getHello();
+
+    return RetType.new<Record<string, string>>()
+      .setData({ version: this.appService.getVersion() })
+      .setHttpStatus(HttpStatus.ACCEPTED);
+    
   }
 }

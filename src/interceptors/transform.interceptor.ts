@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { map } from 'rxjs/operators';
 import { RetType } from '$type/ret';
 import { ILogEnv } from '@src/config';
+import { KError } from '@src/utils/error.handler';
 
 @Injectable()
 class TransformInterceptor<T> implements NestInterceptor<T, RetType<T>> {
@@ -15,35 +16,26 @@ class TransformInterceptor<T> implements NestInterceptor<T, RetType<T>> {
   }
   intercept(context: ExecutionContext, next: CallHandler): Observable<RetType<T>> {
     return next.handle().pipe(
-      map((data: RetType<any> | string) => {
-        let dat: RetType<any> = 
-          (
-            typeof data === 'string'
-              ? {
-                err: undefined,
-                msg: undefined,
-                dat: data,
-                ext: undefined,
-              }
-              : (data.dat && 'kvType' in data.dat && data.dat.kvType === 'KVType')
-                ? {
-                  ...data,
-                  [data.dat.key]: data.dat.value,
-                }
-                : {
-                  ...data,
-                }
-          );
+      map((data: RetType<any> | any) => {
+        if (data instanceof RetType) {
+          const body: any = data.getBody();
 
-        if (this.captureResponse) {
-          Logger.debug(
-            '\n======================= Response: =======================\n'
-              + `[${context.switchToHttp().getResponse().statusCode as number}]\n`
-              + `\n${JSON.stringify(dat, null, 2)}\n`
-              + '===================== End Response ======================\n\n'
-          );
+          context.switchToHttp()
+          .getResponse()
+          .status(data.getHttpStatusCode());
+
+          if (this.captureResponse) {
+            Logger.debug(
+              '\n======================= Response: =======================\n'
+                + `[${context.switchToHttp().getResponse().statusCode as number}]\n`
+                + `\n${JSON.stringify(body, null, 2)}\n`
+                + '===================== End Response ======================\n\n'
+            );
+          }
+          return body;
         }
-        return dat;
+
+        throw new KError('INTERNAL_SERVER_ERROR', 500, 'Internal Server Error', {})
       }),
     );
   }
