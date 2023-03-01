@@ -21,16 +21,16 @@ export interface IHttpExceptionBody {
 }
 
 export function createKErrorBody(
-  message?: object | string,
-  error?: string,
+  error?: object | string,
+  message?: string,
   detail?: object,
 ): IHttpExceptionBody {
 
-  const msg = isString(message) ? message : JSON.stringify(message);
+  const err = isString(error) ? error: JSON.stringify(error, null, 2);
 
   return {
-    error,
-    message: msg,
+    error: err,
+    message: message || err,
     ext: detail || {},
   };
 };
@@ -40,23 +40,26 @@ export function createKErrorBody(
 
 
 export class KError extends HttpException {
-  detail: object;
+  extraInfo: object;
   constructor(
-    message?: string | object | any,
+    error?: string | object | any,
     statusCode: number = 400,
-    error: string = 'Unauthorized',
-    detail: object = {}
+    message: string = 'Unauthorized',
+    extraInfo: object = {}
   ) {
     super(
-      createKErrorBody(message, error, detail),
+      createKErrorBody(error, message, extraInfo),
       statusCode,
     );
-    this.detail = detail || {};
+    this.extraInfo = extraInfo || {};
     console.log(this);
   }
 
-  getErrorDetail() {
-    return this.detail;
+  getErrorString() {
+    return this.getResponse();
+  }
+  getExtraInfo() {
+    return this.extraInfo;
   }
 }
 

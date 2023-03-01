@@ -4,8 +4,10 @@ import {
 import { RetType, HttpStatus } from './@types/ret';
 import { AppService } from './app.service';
 import { PublicEndpoint } from './decorators/public.decorator';
-// import { KError } from './utils/error.handler';
+// import { SkipThrottle } from '@nestjs/throttler';
+import { KError } from './utils/error.handler';
 
+// @SkipThrottle(true)
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
@@ -13,7 +15,7 @@ export class AppController {
   @PublicEndpoint()
   @Get()
   getHello(): RetType<Record<string, string>> {
-    // throw new KError('TEST ERROR', 400, 'error string', {});
+    throw new KError('Error NAME', 400, 'error description', { more: 'info' });
     // throw new UnauthorizedException();
 
     return RetType.new<Record<string, string>>()

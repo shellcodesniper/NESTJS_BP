@@ -35,6 +35,17 @@
 
 ### Throttling
 
+[@nestjs/throttler](https://github.com/nestjs/throttler)
+[NESTJS Docs](https://docs.nestjs.com/security/rate-limiting)
+
+#### SKip Throttling
+```typescript
+
+@SkipThrottle()
+@Controller('users')
+
+```
+
 
 
 

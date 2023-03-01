@@ -2,6 +2,7 @@ import { default as defaultConfig } from './default.config';
 import { default as appConfig } from './app.config';
 import { default as logConfig } from './log.config';
 import { default as jwtConfig } from './jwt.config';
+import { default as rateLimitConfig } from './ratelimit.config';
 
 export interface IDefaultEnv {
   app: IAppEnv;                   // TYPE : APP
@@ -19,6 +20,11 @@ export interface IAppEnv {
   port: number;                   // TYPE : PORT NUMBER
   https: boolean;                 // TYPE : HTTPS ENABLED?
   version: string;                // TYPE : APP VERSION
+}
+
+export interface IRateLimitEnv {
+  ttl: number;                    // TYPE : TIME TO LIVE
+  limit: number;                  // TYPE : LIMIT
 }
 
 export interface ILogEnv {
@@ -57,6 +63,7 @@ export const configLoaders = [
   appConfig,
   logConfig,
   jwtConfig,
+  rateLimitConfig,
 ];
 
 export {
@@ -64,4 +71,5 @@ export {
   appConfig,
   logConfig,
   jwtConfig,
+  rateLimitConfig,
 }

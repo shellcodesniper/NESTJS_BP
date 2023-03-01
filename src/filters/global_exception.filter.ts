@@ -4,7 +4,7 @@ import {
 } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
 import type { Request } from 'express';
-import { isObject, isString } from '@src/utils/error.handler';
+import { isString, KError } from '@src/utils/error.handler';
 
 function convertPrettyKST(time: string | number | Date, simple?: boolean): string {
   const dateObj = new Date(time);
@@ -35,13 +35,30 @@ class GlobalExceptionFilter implements ExceptionFilter {
 
     const status = exception.getStatus ? exception.getStatus() : 400;
 
-    const exceptionResponse = (exception instanceof HttpException) ? exception.getResponse() : {};
-    const exceptionErrorString: string = (isObject(exceptionResponse) && ('error' in exceptionResponse)) ? (exceptionResponse.error || '').toString() : "";
-    const exceptionMessage: string = (isObject(exceptionResponse) && 'message' in exceptionResponse && isString(exceptionResponse.message))
-      ? exceptionResponse.message
-      : JSON.stringify(exceptionResponse || '');
-    const exceptionExtention: object = Object.assign(
-      (isObject(exceptionResponse) && 'ext' in exceptionResponse && isObject(exceptionResponse.ext) ? exceptionResponse.ext : {}),
+    let err: string = '';
+    let msg: string = '';
+    let ext: object = {};
+
+    if (exception instanceof HttpException) {
+      if (isString(exception.getResponse())) {
+        console.log(exception);
+        err = exception.getResponse() as string;
+        msg = (exception.getResponse() as string !== exception.message) ? exception.message : '';
+        ext = {};
+      } else if (exception instanceof KError){
+        console.log(exception);
+        err = isString(exception.getResponse()) ? exception.getResponse() : (exception.getResponse() as any).error || exception.message;
+        msg = isString(exception.getResponse()) ? exception.getResponse() : (exception.getResponse() as any).message || exception.message;
+        ext = exception.getExtraInfo();
+      } else {
+        err = `${exception.getResponse()}`;
+        msg = exception.message;
+        ext = {};
+      }
+
+    }
+    const exceptionExtraInfo: object = Object.assign(
+      ext,
       {
         timestamp: convertPrettyKST(new Date()),
         path: request.url,
@@ -49,9 +66,9 @@ class GlobalExceptionFilter implements ExceptionFilter {
     )
 
     const responseBody = {
-      err: exceptionErrorString,
-      msg: exceptionMessage,
-      ext: exceptionExtention,
+      err,
+      msg,
+      ext: exceptionExtraInfo,
     };
 
     Logger.error(
