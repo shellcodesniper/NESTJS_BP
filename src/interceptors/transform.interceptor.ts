@@ -4,7 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { map } from 'rxjs/operators';
 import { RetType } from '$type/ret';
 import { ILogEnv } from '@src/config';
-import { KError } from '@src/utils/error.handler';
+import { Response } from 'express';
 
 @Injectable()
 class TransformInterceptor<T> implements NestInterceptor<T, RetType<T>> {
@@ -20,9 +20,14 @@ class TransformInterceptor<T> implements NestInterceptor<T, RetType<T>> {
         if (data instanceof RetType) {
           const body: any = data.getBody();
 
-          context.switchToHttp()
-          .getResponse()
-          .status(data.getHttpStatusCode());
+          // NOTE : SET STATUS CODE & HEADER
+          (context.switchToHttp()
+          .getResponse() as Response)
+          .status(data.getHttpStatusCode())
+          .contentType('application/json; charset=utf-8')
+          .setHeader('Content-Location', context.switchToHttp().getRequest().path)
+
+          // NOTE : SET STATUS CODE & HEADER
 
           if (this.captureResponse) {
             Logger.debug(
@@ -34,8 +39,10 @@ class TransformInterceptor<T> implements NestInterceptor<T, RetType<T>> {
           }
           return body;
         }
-
-        throw new KError('INTERNAL_SERVER_ERROR', 500, 'Internal Server Error', {})
+        Logger.debug('Response is not instance of RetType, return as it is');
+        Logger.debug(JSON.stringify(data, null, 2));
+        return data;
+        // throw new KError('INTERNAL_SERVER_ERROR', 500, 'Internal Server Error', {})
       }),
     );
   }
