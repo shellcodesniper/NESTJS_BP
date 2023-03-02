@@ -1,5 +1,7 @@
-target
 Dockerfile
 .dockerignore
 .git
 .gitignore
+
+node_modules/
+dist/
