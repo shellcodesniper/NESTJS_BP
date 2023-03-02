@@ -12,6 +12,7 @@ import { ConfigService } from '@nestjs/config';
 import CloudWatchTransport from 'winston-cloudwatch'; // NOTE : CLOUD WATCH LOGGING
 import { IAppEnv, ILogEnv } from '@config/index';
 import GlobalExceptionFilter from '@common/filters/global_exception.filter';
+import { PrismaService } from '@dbc/prisma.service';
 
 process.env.PACKAGE_NAME = process.env.npm_package_name || 'ql.gl';
 process.env.PACKAGE_DESCRIPTION = process.env.npm_package_description || 'https://ql.gl';
@@ -75,6 +76,9 @@ async function bootstrap() {
   });
 
   app.useLogger(logger);
+
+  const prismaService: PrismaService = app.get(PrismaService);
+  await prismaService.enableShutdownHooks(app);
 
   app.enableShutdownHooks();
   app.enableCors({

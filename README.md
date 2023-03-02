@@ -1,9 +1,30 @@
 ## Repository
 [Template](https://github.com/caramellateam/NESTJS_BP.git)
 
-## DATABASE
+## DATABASE ( prisma branch )
 
 [PRISMA INTEGRATION](https://www.prisma.io/docs/guides)
+.env 파일
+schema.prisma 파일
+
+### DB Commands
+
+- Migrate?
+  - For Development / Staging
+    - Create a migration from changes in Prisma schema
+      `npx prisma migrate `**dev** `[OPTIONS]`
+      **OPTIONS:**
+      - `--create-only`
+        Create new migration but not apply
+      - `--skip-generate`
+        Skip triggering Generator
+      - `--skip-seed`
+        Skip Seed Data
+    - Reset All Pending Migrations from Change
+      `npx prism migrate reset`
+  - For Production
+    - Deploy to Production Database
+      `npx prisma migrate `**deploy**
 
 
 
@@ -22,6 +43,7 @@
 - throttlilng ( Rate Limitting / '아래 Throttling 참고')
 - Login ( '/login' ) + Auth ( '/auth' ) [ Authentication + Authorization 구현]
 - ConfigParser ( YAML Environment Config / '아래 ConfigParser 부분 참고' )
+
 
 
 ### ConfigParser
@@ -98,5 +120,4 @@ $ yarn run start:dev
 # production mode
 $ yarn prod
 ```
-
 
