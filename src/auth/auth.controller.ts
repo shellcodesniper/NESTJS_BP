@@ -6,7 +6,7 @@ import type express from 'express';
 import { LocalAuthGuard } from './local-auth.guard';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { AuthService } from './auth.service';
-import { PublicEndpoint } from '@src/decorators/public.decorator';
+import { PublicEndpoint } from '@common/decorators/public.decorator';
 
 @Controller('/')
 export class AuthController {

@@ -7,7 +7,7 @@
     "assets": [
       {
         "include": "../config/**/*",
-        "outDir": "./dist/config/config/",
+        "outDir": "./dist/common/config/env/",
         "watchAssets": true
       }
     ],

@@ -7,8 +7,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { configLoaders, IRateLimitEnv } from './config/';
-import { CaptureRequestMiddleware } from './middlewares/capture.middleware';
+import { configLoaders, IRateLimitEnv } from '@common/config/index';
+import { CaptureRequestMiddleware } from '@common/middlewares/capture.middleware';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { APP_GUARD } from '@nestjs/core';
