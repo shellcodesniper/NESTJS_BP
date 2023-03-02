@@ -7,11 +7,11 @@ import bodyParser from 'body-parser';
 import 'reflect-metadata';
 import { utilities as nestWinstonModuleUtilities, WinstonModule } from 'nest-winston';
 import winston from 'winston';
-import TransformInterceptor from './interceptors/transform.interceptor';
+import TransformInterceptor from '@common/interceptors/transform.interceptor';
 import { ConfigService } from '@nestjs/config';
 import CloudWatchTransport from 'winston-cloudwatch'; // NOTE : CLOUD WATCH LOGGING
-import { IAppEnv, ILogEnv } from './config';
-import GlobalExceptionFilter from './filters/global_exception.filter';
+import { IAppEnv, ILogEnv } from '@config/index';
+import GlobalExceptionFilter from '@common/filters/global_exception.filter';
 
 process.env.PACKAGE_NAME = process.env.npm_package_name || 'ql.gl';
 process.env.PACKAGE_DESCRIPTION = process.env.npm_package_description || 'https://ql.gl';

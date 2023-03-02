@@ -2,10 +2,10 @@ import { Injectable, NestInterceptor, ExecutionContext, CallHandler, Logger } fr
 import { Observable } from 'rxjs';
 import { ConfigService } from '@nestjs/config';
 import { map } from 'rxjs/operators';
-import { RetType } from '$type/ret';
-import { ILogEnv } from '@src/config';
+import { RetType } from '@type/return.type';
+import { ILogEnv } from '@config/index';
 import { Response } from 'express';
-import { KError } from '@src/utils/error.handler';
+import { KError } from '@error/error.handler';
 
 @Injectable()
 class TransformInterceptor<T> implements NestInterceptor<T, RetType<T>> {

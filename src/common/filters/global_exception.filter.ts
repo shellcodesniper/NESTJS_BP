@@ -4,7 +4,7 @@ import {
 } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
 import type { Request } from 'express';
-import { isString, KError } from '@src/utils/error.handler';
+import { isString, KError } from '@error/error.handler';
 
 function convertPrettyKST(time: string | number | Date, simple?: boolean): string {
   const dateObj = new Date(time);

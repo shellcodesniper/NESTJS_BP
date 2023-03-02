@@ -1,19 +1,22 @@
 import { registerAs } from '@nestjs/config';
-import * as yaml from 'js-yaml';
-import fs from 'fs';
-import path from 'path';
-import { IJWTEnv } from '.';
+import { PARSED_ENV } from './config.parser';
 
-// NOTE : DEFAULT_ENV_PATH
-
-const BASE_PATH: string = path.join(__dirname, 'config'); // NOTE : CONFIG FOLDER PATH
-const ENV_PATH: string = path.join(BASE_PATH, process.env.NODE_ENV === 'production'
-? '.prod.yaml' : '.dev.yaml');
-
-const parsedEnv = yaml.load(fs.readFileSync(ENV_PATH, 'utf-8')) as Record<string, any>;
-const jwtConfig = parsedEnv.jwt as Record<string, any>;
+const jwtConfig = PARSED_ENV.jwt as Record<string, any>;
 const accessConfig = jwtConfig.access_token as Record<string, any>;
 const refreshConfig = jwtConfig.refresh_token as Record<string, any>;
+
+export interface IJWTEnv {
+  accessToken: IJWTOption;        // TYPE : ACCESS TOKEN
+  refreshToken: IJWTOption;       // TYPE : REFRESH TOKEN
+}
+
+export interface IJWTOption {
+  secretOrPrivateKey: string;     // TYPE : SECRET OR PRIVATE KEY
+  signOptions: {                  // TYPE : SIGN OPTIONS
+    algorithm: string;            // TYPE : ALGORITHM
+    expiresIn: number;            // TYPE : EXPIRES IN
+  };
+}
 
 export default registerAs(
   'jwt', // TYPE : REGISTER AS THIS NAME

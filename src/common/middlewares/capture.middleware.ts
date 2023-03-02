@@ -1,6 +1,6 @@
 import { Injectable, NestMiddleware, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { ILogEnv } from '@src/config';
+import { ILogEnv } from '@config/index';
 
 import { Request, Response, NextFunction } from 'express';
 

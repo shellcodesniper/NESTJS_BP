@@ -6,7 +6,7 @@ import { AuthService } from './auth.service';
 import { LocalStrategy } from './local.strategy';
 
 import { JwtModule } from '@nestjs/jwt';
-import { IAppEnv, IJWTEnv } from '@src/config';
+import { IAppEnv, IJWTEnv } from '@config/index';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtStrategy } from './jwt.strategy';
 import { AuthController } from './auth.controller';
