@@ -10,7 +10,7 @@ schema.prisma 파일
 ### DB Commands
 ```
   prisma 파일 분리를 위해 커스텀 스크립트를 넣어두었음 ( ./bin/merge_prisma.sh )
-  ./prisma/partial/ 폴더 이하 *.model.prisma 파일 + ./prisma/base.prisma 파일을 합쳐 ./prisma/schema.prisma 파일을 만들어줌.
+  ./prisma/partial_models/ 폴더 이하 *.model.prisma 파일 + ./prisma/base.prisma 파일을 합쳐 ./prisma/schema.prisma 파일을 만들어줌.
 ```
 
 - MERGE SCHEMA
