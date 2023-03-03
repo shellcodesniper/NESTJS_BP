@@ -1,0 +1,75 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator docs {
+  provider = "node node_modules/prisma-docs-generator"
+  output   = "./generated/docs"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+generator class_validator {
+  provider = "prisma-class-validator-generator"
+  output = "./generated/class-validator"
+}
+
+generator dto {
+  provider                        = "prisma-generator-nestjs-dto"
+  output                          = "./generated/nestjs-dto"
+  outputToNestJsResourceStructure = "true"
+  exportRelationModifierClasses   = "true"
+  reExport                        = "false"
+  createDtoPrefix                 = "Create"
+  updateDtoPrefix                 = "Update"
+  dtoSuffix                       = "Dto"
+  entityPrefix                    = ""
+  entitySuffix                    = ""
+  fileNamingStyle                 = "camel"
+}
+// https://github.com/vegardit/prisma-generator-nestjs-dto
+
+generator dbml {
+  provider = "prisma-dbml-generator"
+  output   = "./generated/dbml"
+}
+// NOTE : `yarn prisma:dbml` will generate a dbml file in the root of your project
+// NOTE : GO TO https://dbdiagram.io/home to SEE!!!
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id    Int     @default(autoincrement()) @id
+  email String  @unique
+  name  String   
+  posts Post[]
+
+
+
+  /// @DtoReadOnly
+  /// @DtoCreateHidden
+  /// @DtoUpdateHidden
+  createdAt DateTime @default(now())
+
+  /// @DtoReadOnly
+  /// @DtoCreateHidden
+  /// @DtoUpdateHidden
+  updatedAt   DateTime @updatedAt
+}
+
+model WorksUser {
+  userId    String   @id @default(cuid()) 
+}
+
+model Post {
+  id        Int      @default(autoincrement()) @id
+  title     String
+  content   String?
+  published Boolean? @default(false)
+  author    User?    @relation(fields: [authorId], references: [id])
+  authorId  Int?
+}
