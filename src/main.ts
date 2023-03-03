@@ -97,6 +97,8 @@ async function bootstrap() {
 
   app.useGlobalPipes(
     new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
       transform: true,
       disableErrorMessages: IS_PRODUCTION, // NOTE : disable Error When Production
     })

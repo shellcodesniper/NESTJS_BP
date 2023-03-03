@@ -10,7 +10,6 @@
     "prebuild": "rimraf dist",
     "build": "nest build && tsc-alias",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-
     "db:mgp": "./bin/merge_prisma.sh",
     "db:gen": "yarn db:mgp && prisma generate",
     "db:watch": "prisma generate --watch",
@@ -22,7 +21,6 @@
     "prod": "NODE_ENV=production APP_VERSION=$(./bin/get_version_script.sh) node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
-
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",

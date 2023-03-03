@@ -1,6 +1,6 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { PostService } from './post.service';
-import { CreatePostDto } from '@gto/post/dto/create-post.dto';
+import { CreatePostDto } from './dto/create-post.dto';
 
 
 @Controller('post')
@@ -13,9 +13,9 @@ export class PostController {
   }
 
   @Get()
-  paginationFind() {
+  paginationFind(@Query('') query: FindPostDto) {
     return this.postService.posts({
-
+      
     })
   }
 

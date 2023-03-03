@@ -12,7 +12,6 @@
       "@util/*":      ["src/common/utils/*"],
       "@decorator/*": ["src/common/decorators/*"],
       "@db/*":        ["src/common/db/*"],
-      "@gto/*":       ["src/common/generated-type-orm/*"]
     },
     "typeRoots": [
       "./node_modules/@types/",
