@@ -9,10 +9,13 @@ schema.prisma 파일
 
 ### DB Commands
 
+- GENERATE
+  - `yarn db:gen` : Generate `doc`/`dbml`/`sql?` !
+  - `yarn db:watch` : `db:gen` when scheme changed!
 - Migrate?
   - For Development / Staging
     - Create a migration from changes in Prisma schema
-      `npx prisma migrate `**dev** `[OPTIONS]`
+      `npx prisma migrate `**dev** `[OPTIONS]` | `yarn db:dev --name {NAME}`
       **OPTIONS:**
       - `--create-only`
         Create new migration but not apply
