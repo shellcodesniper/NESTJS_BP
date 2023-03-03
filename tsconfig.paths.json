@@ -11,7 +11,7 @@
       "@error/*":     ["src/common/errors/*"],
       "@util/*":      ["src/common/utils/*"],
       "@decorator/*": ["src/common/decorators/*"],
-      "@dbc/*":       ["src/common/db/prisma/*"]
+      "@db/*":       ["src/common/db/*"]
     },
     "typeRoots": [
       "./node_modules/@types/",
