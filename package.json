@@ -79,7 +79,6 @@
     "prettier": "^2.3.2",
     "prisma": "^4.11.0",
     "prisma-dbml-generator": "^0.10.0",
-    "prisma-class-validator-generator": "^0.2.0",
     "prisma-docs-generator": "^0.6.0",
     "source-map-support": "^0.5.20",
     "supertest": "^6.1.3",

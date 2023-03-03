@@ -15,6 +15,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { PrismaService } from '@db/prisma.service';
+import { PostModule } from './post/post.module';
 
 
 @Module({
@@ -35,6 +36,7 @@ import { PrismaService } from '@db/prisma.service';
     }),
     AuthModule,
     UsersModule,
+    PostModule,
   ],
   controllers: [
     AppController,

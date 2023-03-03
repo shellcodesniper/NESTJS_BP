@@ -10,14 +10,9 @@ generator client {
   provider = "prisma-client-js"
 }
 
-generator class_validator {
-  provider = "prisma-class-validator-generator"
-  output = "../src/common/db/validator/"
-}
-
 generator dto {
   provider                        = "prisma-generator-nestjs-dto"
-  output                          = "../src/common/db/dto/"
+  output                          = "../src/common/generated-type-orm/"
   outputToNestJsResourceStructure = "true"
   exportRelationModifierClasses   = "true"
   reExport                        = "true"
