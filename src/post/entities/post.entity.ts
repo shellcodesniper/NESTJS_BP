@@ -1,1 +1,6 @@
-export class Post {}
+import { Post } from '@prisma/client';
+
+export {
+  Post
+}
+

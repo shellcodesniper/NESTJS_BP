@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { PostService } from './post.service';
-import { CreatePostDto } from './dto/create-post.dto';
+import { FilterPostDto } from './dto/filter-post.dto';
 
 
 @Controller('post')
@@ -13,7 +13,7 @@ export class PostController {
   }
 
   @Get()
-  paginationFind(@Query('') query: FindPostDto) {
+  paginationFind(@Query() filter: FilterPostDto) {
     return this.postService.posts({
       
     })
