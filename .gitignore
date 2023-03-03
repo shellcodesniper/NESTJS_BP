@@ -45,3 +45,5 @@ lerna-debug.log*
 prisma/generated/
 prisma/*.db
 prisma/*.db-journal
+prisma/schema.prisma
+# NOTE : It will be generated automatically
