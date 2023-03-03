@@ -42,8 +42,8 @@ lerna-debug.log*
 # .dev.yaml
 
 # PRISMA FILES
-prisma/generated/
 prisma/*.db
 prisma/*.db-journal
-prisma/schema.prisma
+
 # NOTE : It will be generated automatically
+prisma/schema.prisma

@@ -14,6 +14,7 @@ schema.prisma 파일
 ```
 
 - MERGE SCHEMA
+  - `yarn db:mgp` : Merge DB Partial Schema & Base Schema -> ./prisma/schema.prisma
 - GENERATE
   - `yarn db:gen` : Generate `doc`/`dbml`/`sql?` !
   - `yarn db:watch` : `db:gen` when scheme changed!
