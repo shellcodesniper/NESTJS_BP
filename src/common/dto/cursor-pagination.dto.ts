@@ -15,7 +15,7 @@ import { IsOptional, IsString } from "class-validator";
 
 // TYPE : 해당 DTO 는 Offset-Based Pagination 을 위한 기본 DTO.
 
-export class OffsetBasedFilterBase {
+export class CursorPaginationBase {
   @Expose()
   @IsString()
   @IsOptional()

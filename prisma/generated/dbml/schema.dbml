@@ -7,7 +7,6 @@ Table Post {
   title String [not null]
   content String
   published Boolean [default: false]
-  author User
   authorId Int
 }
 
@@ -15,7 +14,6 @@ Table User {
   id Int [pk, increment]
   email String [unique, not null]
   name String [not null]
-  posts Post [not null]
   createdAt DateTime [default: `now()`, not null, note: '@DtoReadOnly
 @DtoCreateHidden
 @DtoUpdateHidden']
@@ -27,5 +25,3 @@ Table User {
 Table WorksUser {
   userId String [pk]
 }
-
-Ref: Post.authorId > User.id

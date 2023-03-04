@@ -15,7 +15,7 @@ import { IsNumber, IsOptional, IsString } from "class-validator";
 
 // TYPE : 해당 DTO 는 Offset-Based Pagination 을 위한 기본 DTO.
 
-export class OffsetBasedFilterBase {
+export class OffsetPaginationBase {
   @Expose()
   @IsNumber()
   @IsOptional()
@@ -29,15 +29,15 @@ export class OffsetBasedFilterBase {
   orderBy: string;
 
   @Expose()
-  @IsString()
+  @IsNumber()
   @IsOptional()
   @ApiProperty({ example: '10', required: false, default: '10', description: 'Take' })
-  take: string;
+  take: number;
 
   @Expose()
-  @IsString()
+  @IsNumber()
   @IsOptional()
   @ApiProperty({ example: '0', required: false, default: '0', description: 'Skip' })
-  skip: string;
+  skip: number;
 
 }

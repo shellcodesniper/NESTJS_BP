@@ -22,7 +22,7 @@ import { AuthController } from './auth.controller';
         const accessConfig = jwtConfig.accessToken;
 
         return {
-          secretOrPrivateKey: accessConfig.secretOrPrivateKey,
+          secret: accessConfig.secretOrPrivateKey,
           signOptions: {
             algorithm: accessConfig.signOptions.algorithm as any,
             expiresIn: accessConfig.signOptions.expiresIn,

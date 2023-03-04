@@ -12,7 +12,7 @@ import { IsBoolean, IsNumber, IsOptional, IsString } from "class-validator";
 */
 
 
-export class ConnectPostDto {
+export class CreatePostDto {
   @Expose()
   @IsNumber()
   @ApiProperty()
@@ -35,5 +35,6 @@ export class ConnectPostDto {
   @Expose()
   @IsNumber()
   userId?: number | null;
-  authorId: number  | null;
+
+}
 

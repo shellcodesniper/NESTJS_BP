@@ -1,4 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { OffsetPaginationBase } from "@root/src/common/dto/offset-pagination.dto";
 import { Expose } from "class-transformer";
 import { IsNumber, IsOptional, IsString } from "class-validator";
 
@@ -11,7 +12,7 @@ import { IsNumber, IsOptional, IsString } from "class-validator";
  * https://docs.nestjs.com/techniques/validation 확인
 */
 
-export class FilterPostDto {
+export class FilterPostDto extends OffsetPaginationBase {
   @Expose()
   @IsOptional()
   @IsNumber()
