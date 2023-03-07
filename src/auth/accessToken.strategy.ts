@@ -5,14 +5,17 @@ import { ConfigService } from '@nestjs/config';
 import { IJWTEnv } from '@config/index';
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy) {
+export class AccessTokenStrategy extends PassportStrategy(Strategy, 'jwt') {
   constructor(configService: ConfigService) {
     const jwtConfig = configService.get<IJWTEnv>('jwt')!;
 
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: jwtConfig.accessToken.secretOrPrivateKey,
+      algorithms: [
+        jwtConfig.accessToken.signOptions.algorithm as any,
+      ],
+      secretOrKey: jwtConfig.accessToken.secretOrPrivateKey, // NOTE: PRIVATE KEY / SECRET KEY 설정 해야함.
     });
   }
 

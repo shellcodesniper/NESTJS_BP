@@ -31,6 +31,8 @@ async function bootstrap() {
     rawBody: true,
   });
 
+  app.getHttpAdapter().getInstance().disable('x-powered-by'); // NOTE : SECURITY OPTION
+
   const config = app.get(ConfigService);
 
   const appConfig = config.get<IAppEnv>('app')!;

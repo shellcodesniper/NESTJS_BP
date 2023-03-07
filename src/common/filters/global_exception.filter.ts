@@ -39,6 +39,8 @@ class GlobalExceptionFilter implements ExceptionFilter {
     let msg: string = '';
     let ext: object = {};
 
+    Logger.error(exception);
+
     if (exception instanceof HttpException) {
       if (isString(exception.getResponse())) {
         console.log(exception);
@@ -51,12 +53,14 @@ class GlobalExceptionFilter implements ExceptionFilter {
         msg = isString(exception.getResponse()) ? exception.getResponse() : (exception.getResponse() as any).message || exception.message;
         ext = exception.getExtraInfo();
       } else {
-        err = `${exception.getResponse()}`;
-        msg = exception.message;
+        err = exception.message || 'Unknown Error';
+        msg = '';
         ext = {};
       }
-
+    } else {
+      Logger.error(`[GlobalExceptionFilter] : ${exception}`);
     }
+
     const exceptionExtraInfo: object = Object.assign(
       ext,
       {
