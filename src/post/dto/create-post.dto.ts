@@ -1,6 +1,10 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Expose } from "class-transformer";
-import { IsBoolean, IsNumber, IsOptional, IsString } from "class-validator";
+import {
+  IsBoolean,
+  // IsNumber,
+  IsOptional, IsString,
+} from "class-validator";
 
 /* NOTE:
  * @Expose() 를 붙인 것만 결과에 포함됨!
@@ -13,28 +17,27 @@ import { IsBoolean, IsNumber, IsOptional, IsString } from "class-validator";
 
 
 export class CreatePostDto {
-  @Expose()
-  @IsNumber()
   @ApiProperty()
-  id: number ;
-
   @Expose()
   @IsString()
-  title: string ;
+  title: string;
 
+  @ApiProperty()
   @Expose()
   @IsOptional()
   @IsString()
   content: string  | null;
 
+  @ApiProperty()
   @Expose()
   @IsBoolean()
   @IsOptional()
   published: boolean  | null;
   
-  @Expose()
-  @IsNumber()
-  userId?: number | null;
+  // @ApiProperty()
+  // @Expose()
+  // @IsNumber()
+  // authorId?: number | null;
 
 }
 

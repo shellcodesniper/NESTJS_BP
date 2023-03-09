@@ -7,7 +7,7 @@ app:
 
 rate-limit:
   # TYPE: ttl 단위 (초)
-  ttl: 10
+  ttl: 1
   # TYPE: ttl 당 제한
   limit: 1
 

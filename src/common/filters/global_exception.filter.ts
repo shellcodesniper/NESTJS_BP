@@ -1,6 +1,6 @@
 import {
   ExceptionFilter, Catch,
-  ArgumentsHost, Logger, HttpException,
+  ArgumentsHost, Logger, HttpException, HttpStatus,
 } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
 import type { Request } from 'express';
@@ -33,39 +33,41 @@ class GlobalExceptionFilter implements ExceptionFilter {
     // const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
 
-    const status = exception.getStatus ? exception.getStatus() : 400;
+    const status = exception.getStatus ? exception.getStatus() : HttpStatus.I_AM_A_TEAPOT;
 
     let err: string = '';
     let msg: string = '';
     let ext: object = {};
 
-    Logger.error(exception);
 
     if (exception instanceof HttpException) {
+      const res = exception.getResponse() as any;
+      console.error(res);
       if (isString(exception.getResponse())) {
-        console.log(exception);
-        err = exception.getResponse() as string;
-        msg = (exception.getResponse() as string !== exception.message) ? exception.message : '';
+        err = res as string;
+        msg = (res as string !== exception.message) ? exception.message : '';
         ext = {};
       } else if (exception instanceof KError){
-        console.log(exception);
-        err = isString(exception.getResponse()) ? exception.getResponse() : (exception.getResponse() as any).error || exception.message;
-        msg = isString(exception.getResponse()) ? exception.getResponse() : (exception.getResponse() as any).message || exception.message;
+        err = isString(res) ? res : (res).error || exception.message || '';
+        msg = isString(res) ? res : (res).message || exception.message || '';
         ext = exception.getExtraInfo();
       } else {
         err = exception.message || 'Unknown Error';
-        msg = '';
+        msg = res.message || '';
         ext = {};
       }
     } else {
-      Logger.error(`[GlobalExceptionFilter] : ${exception}`);
+      console.error(exception);
+      // Logger.error(`[GlobalExceptionFilter] : ${exception}`);
+      err = 'Unknown Error';
+      msg = "I'm a Tea Pot. Look at Console";
     }
 
     const exceptionExtraInfo: object = Object.assign(
       ext,
       {
         timestamp: convertPrettyKST(new Date()),
-        path: request.url,
+        path: new URL(request.url, `http://${request.headers.host}`).pathname,
       }
     )
 

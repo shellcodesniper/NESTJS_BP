@@ -99,10 +99,22 @@ async function bootstrap() {
 
   app.useGlobalPipes(
     new ValidationPipe({
+      always: true,
+      transform: true,
+      skipMissingProperties: false,
+      skipUndefinedProperties: false,
+      forbidUnknownValues: true,
+
       whitelist: true,
       forbidNonWhitelisted: true,
-      transform: true,
       disableErrorMessages: IS_PRODUCTION, // NOTE : disable Error When Production
+      enableDebugMessages: !IS_PRODUCTION,
+      // transformOptions: {
+      //   excludeExtraneousValues: true,
+      //   exposeDefaultValues: false,
+      //   excludePrefixes: ['_'],
+      //   enableCircularCheck: true,
+      // },
     })
   );
 

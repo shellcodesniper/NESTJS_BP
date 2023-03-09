@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { Expose } from "class-transformer";
-import { IsNumber, IsOptional, IsString } from "class-validator";
+import { Expose, Transform } from "class-transformer";
+import { IsInt, IsOptional, IsString } from "class-validator";
 
 /* NOTE:
  * @Expose() 를 붙인 것만 결과에 포함됨!
@@ -17,27 +17,30 @@ import { IsNumber, IsOptional, IsString } from "class-validator";
 
 export class OffsetPaginationBase {
   @Expose()
-  @IsNumber()
   @IsOptional()
-  @ApiProperty({ example: 0, required: false, default: 0, description: 'Offset' })
+  @IsInt()
+  @ApiProperty({ example: 0, required: false, default: 0, description: 'Specify Exact One' })
+  @Transform(({ value }) => parseInt(value) || 0)
   offset: number;
 
   @Expose()
   @IsString()
   @IsOptional()
-  @ApiProperty({ example: 'id:asc', required: false, default: 'id:asc', description: 'Order By' })
-  orderBy: string;
+  @ApiProperty({ example: 'id:asc', required: false, default: 'id:asc', description: 'Order By ("col:order")' })
+  orderBy?: string;
 
   @Expose()
-  @IsNumber()
+  @IsInt()
   @IsOptional()
-  @ApiProperty({ example: '10', required: false, default: '10', description: 'Take' })
-  take: number;
+  @ApiProperty({ example: '10', required: false, default: '10', description: 'Take ( COUNT )' })
+  @Transform(({ value }): number | undefined => (parseInt(value, 10) || undefined))
+  take?: number;
 
   @Expose()
-  @IsNumber()
+  @IsInt()
   @IsOptional()
-  @ApiProperty({ example: '0', required: false, default: '0', description: 'Skip' })
-  skip: number;
+  @ApiProperty({ example: '0', required: false, default: '0', description: 'Skip ( COUNT )' })
+  @Transform(({ value }): number | undefined => (parseInt(value, 10) || undefined))
+  skip?: number;
 
 }

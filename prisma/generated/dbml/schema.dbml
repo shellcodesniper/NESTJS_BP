@@ -7,7 +7,6 @@ Table Post {
   title String [not null]
   content String
   published Boolean [default: false]
-  authorId Int
 }
 
 Table User {

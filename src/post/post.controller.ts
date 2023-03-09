@@ -31,15 +31,16 @@ export class PostController {
 
   @Get()
   async paginationFind(@Query() filter: FilterPostDto): Promise<RetType<Record<string, any>>> {
+    console.log(filter);
     const posts = await this.postService.posts({
-      skip: filter.offset,
+      skip: filter.skip,
       take: filter.take,
       cursor: {
         id: filter.id
       },
 
       where: {
-        OR: [
+        AND: [
           { title: { contains: filter.title } },
           { content: { contains: filter.content } },
         ],
