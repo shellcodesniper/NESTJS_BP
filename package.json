@@ -13,7 +13,9 @@
     "db:mgp": "./bin/merge_prisma.sh",
     "db:gen": "yarn db:mgp && prisma generate",
     "db:watch": "prisma generate --watch",
-    "db:dev": "yarn db:mgp && prisma migrate dev --preview-feature",
+    "db:dev": "yarn db:gen && dotenv -e .env.dev prisma migrate dev --preview-feature",
+    "db:deploy": "yarn db:gen && prisma migrate deploy --preview-feature",
+
     "start": "APP_VERSION=$(./bin/get_version_script.sh) nest start",
     "dev": "APP_VERSION=$(./bin/get_version_script.sh) nest start --watch",
     "debug": "APP_VERSION=$(./bin/get_version_script.sh) nest start --debug --watch",

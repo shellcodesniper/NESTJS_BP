@@ -1,3 +1,11 @@
+## Requirements [ 필독 ]
+
+**`yarn global add dotenv-cli`** 를 실행하여, dotenv-cli 깔아야함.
+
+
+
+
+
 ## Repository
 [Template](https://github.com/caramellateam/NESTJS_BP.git)
 
@@ -6,6 +14,7 @@
 [PRISMA INTEGRATION](https://www.prisma.io/docs/guides)
 .env 파일
 schema.prisma 파일
+
 
 ### DB Commands
 ```
@@ -19,6 +28,9 @@ schema.prisma 파일
   - `yarn db:gen` : Generate `doc`/`dbml`/`sql?` !
   - `yarn db:watch` : `db:gen` when scheme changed!
 - Migrate?
+  - `yarn db:dev` : Migration 생성
+  - `yarn db:deploy` : 배포!
+
   - For Development / Staging
     - Create a migration from changes in Prisma schema
       `npx prisma migrate `**dev** `[OPTIONS]` | `yarn db:dev --name {NAME}`
