@@ -54,20 +54,18 @@ export class AccessTokenGuard extends AuthGuard('jwt') {
     super();
   }
 
-  canActivate(context: ExecutionContext) {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     // Add your custom authentication logic here
     // for example, call super.logIn(request) to establish a session.
+    console.log(context);
     console.log('check jwt auth guard');
+    const parentCanActivate = (await super.canActivate(context)) as boolean;
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
       context.getHandler(),
       context.getClass(),
     ]);
-    if (isPublic) {
-      return true;
-    }
 
-    console.log(`result: ${super.canActivate(context)}`);
-    return super.canActivate(context);
+    return parentCanActivate || isPublic;
   }
 
   handleRequest(err: any, user: any, _info: any) {
