@@ -35,16 +35,14 @@ export class PostController {
     const posts = await this.postService.posts({
       skip: filter.skip,
       take: filter.take,
-      cursor: {
-        id: filter.id
-      },
+      cursor: (filter.offset ? { id: filter.offset } : undefined),
 
       where: {
         AND: [
           { title: { contains: filter.title } },
           { content: { contains: filter.content } },
         ],
-      }
+      },
     });
 
     return RetType.new<Record<string, any>>()

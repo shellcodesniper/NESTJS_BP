@@ -1,7 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { OffsetPaginationBase } from "@root/src/common/dto/offset-pagination.dto";
 import { Transform } from "class-transformer";
-import { IsInt, IsOptional, IsString, ValidateIf } from "class-validator";
+import { IsString, ValidateIf } from "class-validator";
 
 /* NOTE:
  * @Expose() 를 붙인 것만 결과에 포함됨!
@@ -13,11 +13,6 @@ import { IsInt, IsOptional, IsString, ValidateIf } from "class-validator";
 */
 
 export class FilterPostDto extends OffsetPaginationBase {
-  @IsOptional()
-  @IsInt()
-  @Transform(({ value }) => parseInt(value))
-  id?: number;
-
   @IsString()
   @ApiProperty({ title: '제목', example: '검색어', required: false, default: '', description: '검색어' })
   @ValidateIf((o) => !o.content || o.content.lenght === 0 || o.title )

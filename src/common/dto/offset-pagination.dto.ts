@@ -19,9 +19,9 @@ export class OffsetPaginationBase {
   @Expose()
   @IsOptional()
   @IsInt()
-  @ApiProperty({ example: 0, required: false, default: 0, description: 'Specify Exact One' })
-  @Transform(({ value }) => parseInt(value) || 0)
-  offset: number;
+  @ApiProperty({ example: 0, required: false, default: 0, description: 'Cursor Offset' })
+  @Transform(({ value }) => parseInt(value) || undefined)
+  offset?: number;
 
   @Expose()
   @IsString()
