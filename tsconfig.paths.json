@@ -10,7 +10,8 @@
       "@constant/*":  ["src/common/constants/*"],
       "@error/*":     ["src/common/errors/*"],
       "@util/*":      ["src/common/utils/*"],
-      "@decorator/*": ["src/common/decorators/*"]
+      "@decorator/*": ["src/common/decorators/*"],
+      "@db/*":        ["src/common/db/*"]
     },
     "typeRoots": [
       "./node_modules/@types/",

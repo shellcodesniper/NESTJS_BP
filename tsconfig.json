@@ -28,5 +28,5 @@
     "noUncheckedIndexedAccess": true,
     "noUnusedLocals": true
   },
-  "exclude": ["node_modules", "test", "dist", "**/*spec.ts", "backups"]
+  "exclude": ["node_modules", "test", "dist", "**/*spec.ts", "backups", "prisma/generated/**"]
 }

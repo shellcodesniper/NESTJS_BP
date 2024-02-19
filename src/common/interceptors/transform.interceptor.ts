@@ -42,7 +42,7 @@ class TransformInterceptor<T> implements NestInterceptor<T, RetType<T>> {
         }
         Logger.error('Response is not instance of RetType, return as it is');
         Logger.error(JSON.stringify(data, null, 2));
-        throw new KError('INTERNAL_SERVER_ERROR', 500, 'Internal Server Error', {})
+        throw new KError('INTERNAL_SERVER_ERROR', 500, 'Response is not instance of RetType.', {})
       }),
     );
   }

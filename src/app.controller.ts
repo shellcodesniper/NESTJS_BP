@@ -15,7 +15,7 @@ export class AppController {
   @PublicEndpoint()
   @Get()
   getHello(): RetType<Record<string, string>> {
-    // throw new KError('Error NAME', 400, 'error description', { more: 'info' });
+    // throw new KError('Error NAME', 418, 'error description', { more: 'info' });
     // throw new UnauthorizedException();
 
     return RetType.new<Record<string, string>>()

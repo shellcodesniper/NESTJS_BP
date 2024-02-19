@@ -1,0 +1,19 @@
+model User {
+  id    Int     @default(autoincrement()) @id
+  email String  @unique
+  name  String   
+  // posts Post[]
+
+
+
+  /// @DtoReadOnly
+  /// @DtoCreateHidden
+  /// @DtoUpdateHidden
+  createdAt DateTime @default(now())
+
+  /// @DtoReadOnly
+  /// @DtoCreateHidden
+  /// @DtoUpdateHidden
+  updatedAt   DateTime @updatedAt
+}
+

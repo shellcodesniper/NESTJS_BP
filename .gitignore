@@ -40,3 +40,10 @@ lerna-debug.log*
 # DOTENV YAML FILES
 # .prod.yaml
 # .dev.yaml
+
+# PRISMA FILES
+prisma/*.db
+prisma/*.db-journal
+
+# NOTE : It will be generated automatically
+prisma/schema.prisma

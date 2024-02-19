@@ -12,8 +12,10 @@ import { CaptureRequestMiddleware } from '@common/middlewares/capture.middleware
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { APP_GUARD } from '@nestjs/core';
-import { JwtAuthGuard } from './auth/jwt-auth.guard';
+import { AccessTokenGuard } from './auth/accessToken.guard';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { PrismaService } from '@db/prisma.service';
+import { PostModule } from './post/post.module';
 
 
 @Module({
@@ -34,6 +36,7 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
     }),
     AuthModule,
     UsersModule,
+    PostModule,
   ],
   controllers: [
     AppController,
@@ -41,7 +44,7 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
   providers: [
     {
       provide: APP_GUARD,
-      useClass: JwtAuthGuard,
+      useClass: AccessTokenGuard,
     },
     {
       provide: APP_GUARD,
@@ -49,6 +52,7 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
     },
     AppService,
     ConfigService,
+    PrismaService,
   ],
 })
 export class AppModule implements NestModule {

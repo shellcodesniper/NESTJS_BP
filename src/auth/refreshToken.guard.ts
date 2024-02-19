@@ -3,27 +3,24 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { Reflector } from '@nestjs/core';
+// import { Reflector } from '@nestjs/core';
 import { AuthGuard } from '@nestjs/passport';
-import { IS_PUBLIC_KEY } from '@common/decorators/public.decorator';
 
 @Injectable()
-export class JwtAuthGuard extends AuthGuard('jwt') {
-  constructor(private reflector: Reflector) {
+export class RefreshTokenGuard extends AuthGuard('refresh-jwt') {
+  constructor(
+    // private reflector: Reflector,
+  ) {
     super();
   }
 
-  canActivate(context: ExecutionContext) {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     // Add your custom authentication logic here
     // for example, call super.logIn(request) to establish a session.
-    const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
-      context.getHandler(),
-      context.getClass(),
-    ]);
-    if (isPublic) {
-      return true;
-    }
-    return super.canActivate(context);
+    console.log('check refresh-jwt auth guard');
+    const parentCanActivate = (await super.canActivate(context)) as boolean;
+
+    return parentCanActivate;
   }
 
   handleRequest(err: any, user: any, _info: any) {
@@ -34,3 +31,4 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     return user;
   }
 }
+

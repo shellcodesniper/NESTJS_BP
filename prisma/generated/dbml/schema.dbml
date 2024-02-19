@@ -1,0 +1,26 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table Post {
+  id Int [pk, increment]
+  title String [not null]
+  content String
+  published Boolean [default: false]
+}
+
+Table User {
+  id Int [pk, increment]
+  email String [unique, not null]
+  name String [not null]
+  createdAt DateTime [default: `now()`, not null, note: '@DtoReadOnly
+@DtoCreateHidden
+@DtoUpdateHidden']
+  updatedAt DateTime [not null, note: '@DtoReadOnly
+@DtoCreateHidden
+@DtoUpdateHidden']
+}
+
+Table WorksUser {
+  userId String [pk]
+}
